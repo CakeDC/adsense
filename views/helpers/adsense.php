@@ -1,10 +1,10 @@
 <?php
 class AdsenseHelper extends AppHelper {
+
 /**
  * Helpers
  *
  * @var array
- * @access public
  */
 	public $helpers = array('Html', 'Session');
 
@@ -12,7 +12,6 @@ class AdsenseHelper extends AppHelper {
  * Templates
  *
  * @var array
- * @access public
  */
 	public $units = array(
 		'text' => array(
@@ -261,7 +260,6 @@ class AdsenseHelper extends AppHelper {
  * Maps more common and short names to the google adsense js variables
  *
  * @var array
- * @access public
  */
 	public $optionMap = array(
 		'client' => 'google_ad_client',
@@ -273,7 +271,6 @@ class AdsenseHelper extends AppHelper {
  * Constructor
  *
  * @return void
- * @access public
  */
 	public function __construct() {
 		parent::__construct();
@@ -285,7 +282,6 @@ class AdsenseHelper extends AppHelper {
  * Displays a google adsense block
  *
  * @return string
- * @access public
  */
 	public function display($options = null, $template = null, $showLoggedIn = true) {
 		if ($showLoggedIn == false && $this->Session->check('Auth.User')) {
@@ -317,7 +313,6 @@ class AdsenseHelper extends AppHelper {
  * @param array Options
  * @param array boolean Display ads to logged in users, default true
  * @return string
- * @access public
  */
 	public function inject($i, $ads = array(), $options = array(), $showLoggedIn = true) {
 		if ($showLoggedIn == false && $this->Session->check('Auth.User')) {
@@ -334,7 +329,6 @@ class AdsenseHelper extends AppHelper {
  *
  * @param array Options
  * @return string
- * @access public
  */
 	private function __processOptions($options) {
 		$jsOptions = '';
@@ -345,6 +339,4 @@ class AdsenseHelper extends AppHelper {
 		}
 		return $jsOptions;
 	}
-
 }
-?>
