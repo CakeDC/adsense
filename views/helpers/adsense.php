@@ -286,10 +286,11 @@ class AdsenseHelper extends AppHelper {
 /**
  * Constructor
  *
+ * @param View
  * @return void
  */
-	public function __construct() {
-		parent::__construct();
+	public function __construct($View) {
+		parent::__construct($View);
 		$this->defaults = array(
 			'client' => Configure::read('Adsense.client'));
 	}

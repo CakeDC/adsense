@@ -19,7 +19,7 @@
  * @since         CakePHP(tm) v 1.2.0.4206
  * @license       http://www.opensource.org/licenses/opengroup.php The Open Group Test Suite License
  */
-App::import('Core', array('Helper', 'AppHelper', 'ClassRegistry', 'Controller', 'Model', 'CakeSession'));
+App::import('Core', array('Helper', 'AppHelper', 'ClassRegistry', 'Controller', 'Model', 'CakeSession', 'View'));
 App::import('Helper', array('Adsense.Adsense'));
 
 /**
@@ -47,8 +47,6 @@ class AdsenseTestController extends Controller {
 	public $uses = null;
 }
 
-Mock::generate('View', 'AdsenseHelperMockView');
-
 /**
  * AdsenseHelperTest class
  *
@@ -72,7 +70,9 @@ class AdsenseHelperTest extends CakeTestCase {
  * @return void
  */
 	public function startTest() {
-		$this->Adsense = new AdsenseHelper();
+		$controller = null;
+		$View = new View($controller);
+		$this->Adsense = new AdsenseHelper($View);
 		$this->Adsense->units = array(
 			'text' => array(
 				'banner' => array(
@@ -124,7 +124,7 @@ class AdsenseHelperTest extends CakeTestCase {
 	public function testDisplay() {
 		$result = $this->Adsense->display('text', 'banner');
 		$this->assertTrue(is_string($result));
-		$this->assertTrue(preg_match('/\<script type=\"text\/javascript\"\>/', $result));
+		$this->assertEqual(preg_match('/\<script type=\"text\/javascript\"\>/', $result), 1);
 	}
 
 /**
