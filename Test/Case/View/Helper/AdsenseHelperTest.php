@@ -19,8 +19,10 @@
  * @since         CakePHP(tm) v 1.2.0.4206
  * @license       http://www.opensource.org/licenses/opengroup.php The Open Group Test Suite License
  */
-App::import('Core', array('Helper', 'AppHelper', 'ClassRegistry', 'Controller', 'Model', 'CakeSession', 'View'));
-App::import('Helper', array('Adsense.Adsense'));
+
+App::uses('AdsenseHelper', 'Adsense.View/Helper');
+App::uses('Controller', 'Controller');
+App::uses('View', 'View');
 
 /**
  * TheHtmlTestController class
@@ -69,8 +71,9 @@ class AdsenseHelperTest extends CakeTestCase {
  * @access public
  * @return void
  */
-	public function startTest() {
-		$controller = null;
+	public function setUp() {
+		parent::setUp();
+		$controller = new Controller;
 		$View = new View($controller);
 		$this->Adsense = new AdsenseHelper($View);
 		$this->Adsense->units = array(
@@ -110,8 +113,8 @@ class AdsenseHelperTest extends CakeTestCase {
  * @access public
  * @return void
  */
-	public function endTest() {
-		ClassRegistry::flush();
+	public function tearDown() {
+		parent::tearDown();
 		unset($this->Adsense);
 	}
 
