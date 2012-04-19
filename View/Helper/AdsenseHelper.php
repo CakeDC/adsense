@@ -9,6 +9,8 @@
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
+App::uses('AppHelper', 'View/Helper');
+
 /**
  * Adsense Helper
  *
@@ -289,8 +291,8 @@ class AdsenseHelper extends AppHelper {
  * @param View
  * @return void
  */
-	public function __construct($View) {
-		parent::__construct($View);
+	public function __construct(View $View, $settings = array()) {
+		parent::__construct($View, $settings);
 		$this->defaults = array(
 			'client' => Configure::read('Adsense.client'));
 	}
