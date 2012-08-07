@@ -7,7 +7,7 @@
  * PHP 5
  *
  * CakePHP(tm) Tests <https://trac.cakephp.org/wiki/Developement/TestSuite>
- * Copyright 2006-2009, Cake Software Foundation, Inc.
+ * Copyright 2006-2012, Cake Software Foundation, Inc.
  *
  *  Licensed under The Open Group Test Suite License
  *  Redistributions of files must retain the above copyright notice.
@@ -150,4 +150,3 @@ class AdsenseHelperTest extends CakeTestCase {
 		$this->assertTrue(!empty($result[9]));
 	}
 }
-?>

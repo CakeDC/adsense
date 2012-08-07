@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright 2010, Cake Development Corporation (http://cakedc.com)
+ * Copyright 2012, Cake Development Corporation (http://cakedc.com)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright Copyright 2010, Cake Development Corporation (http://cakedc.com)
+ * @copyright Copyright 2012, Cake Development Corporation (http://cakedc.com)
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
@@ -24,7 +24,9 @@ class AdsenseHelper extends AppHelper {
  *
  * @var array
  */
-	public $helpers = array('Html', 'Session');
+	public $helpers = array(
+		'Html',
+		'Session');
 
 /**
  * Templates
@@ -32,6 +34,13 @@ class AdsenseHelper extends AppHelper {
  * @var array
  */
 	public $units = array();
+
+/**
+ * Settings
+ *
+ * @var array
+ */
+	public $settings = array();
 
 /**
  * Maps more common and short names to the google adsense js variables
@@ -52,13 +61,15 @@ class AdsenseHelper extends AppHelper {
  */
 	public function __construct(View $View, $settings = array()) {
 		parent::__construct($View, $settings);
-		$this->defaults = array(
+		$defaults = array(
+			'authSessionKey' => 'Auth.User',
+			'adScriptUrl' => 'http://pagead2.googlesyndication.com/pagead/show_ads.js',
 			'config' => 'adsense',
 			'client' => Configure::read('Adsense.client'));
 
-		$this->defaults = Set::merge($this->defaults, $settings);
+		$this->settings = Set::merge($defaults, $settings);
 
-		$config = $this->defaults['config'];
+		$config = $this->settings['config'];
 		if ($config !== false) {
 			Configure::load($config);
 			$this->units = Configure::read('Adsense.units');
@@ -71,7 +82,9 @@ class AdsenseHelper extends AppHelper {
  * @return string
  */
 	public function display($options = null, $template = null, $showLoggedIn = true) {
-		if ($showLoggedIn == false && $this->Session->check('Auth.User')) {
+		extract($this->settings);
+
+		if ($showLoggedIn == false && $this->Session->check($authSessionKey)) {
 			return null;
 		}
 
@@ -84,7 +97,7 @@ class AdsenseHelper extends AppHelper {
 		$string = '<script type="text/javascript"><!--' . "\n";
 		$string .= $this->__processOptions($options);
 		$string .= "\n" . '//--></script>' . "\n";
-		$string .= '<script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>';
+		$string .= '<script type="text/javascript" src="' . $adScriptUrl . '"></script>';
 
 		return $string;
 	}
@@ -102,12 +115,20 @@ class AdsenseHelper extends AppHelper {
  * @return string
  */
 	public function inject($i, $ads = array(), $options = array(), $showLoggedIn = true) {
-		if ($showLoggedIn == false && $this->Session->check('Auth.User')) {
+		extract($this->settings);
+		$options = Set::merge(array('div' => array()), $options);
+
+		if ($showLoggedIn == false && $this->Session->check($authSessionKey)) {
 			return;
 		}
 
 		if (!empty($ads[$i])) {
-			return '<div class="adsense">' . $ads[$i] . '</div>';
+			if ($options['div'] !== false && is_array($options['div'])) {
+				$divOptions = Set::merge(array('class' => 'adsense', $options['div']));
+				return $this->Html->div($ads[$i], $divOptions);
+			}
+
+			return $ads[$i];
 		}
 	}
 
@@ -117,7 +138,7 @@ class AdsenseHelper extends AppHelper {
  * @param array Options
  * @return string
  */
-	private function __processOptions($options) {
+	protected function __processOptions($options) {
 		$jsOptions = '';
 		foreach ($options as $key => $value) {
 			if (array_key_exists($key, $this->optionMap)) {
@@ -126,4 +147,5 @@ class AdsenseHelper extends AppHelper {
 		}
 		return $jsOptions;
 	}
+
 }
